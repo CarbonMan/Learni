@@ -2071,7 +2071,9 @@ module.exports = function whichTypedArray(value) {
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"available-typed-arrays":1,"call-bind/callBound":2,"es-abstract/helpers/getOwnPropertyDescriptor":4,"foreach":5,"has-symbols":9,"is-typed-array":15}],21:[function(require,module,exports){
-require('mocha-testcheck').install();
+ document.addEventListener("DOMContentLoaded", () => {
+	require('mocha-testcheck').install();
+ });
 },{"mocha-testcheck":22}],22:[function(require,module,exports){
 (function (global){(function (){
 var testcheck = require('testcheck');
