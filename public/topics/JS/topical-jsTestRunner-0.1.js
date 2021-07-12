@@ -1,6 +1,4 @@
-	debugger;
-
-window.onload = function(){
+window.addEventListener('load', (event)=>{
 	debugger;
   TOPICAL.LOAD_JS_TEST_RUNNER = 'jsTestRunnerReady';
     TOPICAL.JSCoding = function() {
