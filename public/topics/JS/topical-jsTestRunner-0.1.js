@@ -138,4 +138,4 @@ window.addEventListener('load', (event)=>{
                 });
         }, 1000);
     });
-};
+});
