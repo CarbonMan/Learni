@@ -1,4 +1,7 @@
+	debugger;
+
 window.onload = function(){
+	debugger;
   TOPICAL.LOAD_JS_TEST_RUNNER = 'jsTestRunnerReady';
     TOPICAL.JSCoding = function() {
         var me = this;
