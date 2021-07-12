@@ -30,9 +30,11 @@
                 .then(() => {
                     console.log('Generating TOPICAL.INIT');
 
-                    document.dispatchEvent(new CustomEvent(TOPICAL.INIT, {
-                        detail: me
-                    }));
+                    window.addEventListener('load', (event)=>{
+                        document.dispatchEvent(new CustomEvent(TOPICAL.INIT, {
+                            detail: me
+                        }));
+                    });
                 })
                 .catch((e) => {
                     console.error(e);
