@@ -9,13 +9,6 @@
                     onload : resolve,
                     onerror: reject
                 });
-                /*
-                var script = document.createElement('script');
-                document.getElementsByTagName('head')[0].appendChild(script);
-                script.onload = resolve;
-                script.onerror = reject;
-                script.src = "https://cdn.jsdelivr.net/gh/CarbonMan/Learni/public/mocha8.0.1-modified.js";
-                */
             }));
             pending.push(new Promise((resolve, reject) => {
                 me.loadScript({
@@ -23,13 +16,6 @@
                     onload : resolve,
                     onerror: reject
                 });
-                /*
-                var script = document.createElement('script');
-                document.getElementsByTagName('head')[0].appendChild(script);
-                script.onload = resolve;
-                script.onerror = reject;
-                script.src = "https://cdn.jsdelivr.net/gh/CarbonMan/Learni/public/chai-4.3.4-mod.js";
-                */
             }));
             pending.push(new Promise((resolve, reject) => {
                 me.loadScript({
@@ -37,13 +23,6 @@
                     onload : resolve,
                     onerror: reject
                 });
-                /*
-                var script = document.createElement('script');
-                document.getElementsByTagName('head')[0].appendChild(script);
-                script.onload = resolve;
-                script.onerror = reject;
-                script.src = "https://cdn.jsdelivr.net/gh/CarbonMan/Learni/public/mochaTestBundle-0.2.js";
-                */
             }));
             Promise.all(pending)
                 .then(() => {
