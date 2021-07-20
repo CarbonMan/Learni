@@ -48,11 +48,13 @@
             Promise.all(pending)
                 .then(() => {
                     console.log('Generating TOPICAL.INIT');
-
-                    window.addEventListener('load', (event)=>{
-                        document.dispatchEvent(new CustomEvent(TOPICAL.INIT, {
-                            detail: me
-                        }));
+                    function init(){
+                       document.dispatchEvent(new CustomEvent(TOPICAL.INIT, {detail: me}));
+                    }
+                    if (document.readyState === "complete") {
+                        init();
+                    } else {
+                        window.addEventListener('load', init);
                     });
                 })
                 .catch((e) => {
