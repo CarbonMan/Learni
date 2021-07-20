@@ -55,7 +55,7 @@
                         init();
                     } else {
                         window.addEventListener('load', init);
-                    });
+                    }
                 })
                 .catch((e) => {
                     console.error(e);
