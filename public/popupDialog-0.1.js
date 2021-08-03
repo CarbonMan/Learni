@@ -14,14 +14,22 @@ T$.Dialog = function(content, config){
   
   this.config = config || {};
   
+  // <iframe name="iframe1" src="about:blank""></iframe>
+  self.content = document.createElement("iFrame");
+  self.content.src = "about:blank";
+  self.content.id = "TopicalPopup";
+  //document.appendChild(iFrame);
+  
   this.init = function(){
     //check for an element passed as content or a selector corresponding to an element
+    /*
     self.content = content.tagName ? content : document.querySelector(content);
     if( ! self.content){
       //otherwise content is text to be appended to the dialog body
       self.content = document.createElement("div");
       self.content.innerText = content;
     }
+    */
     self.container = self.create();
     self.body.appendChild(self.content);
     if(document.body){
@@ -121,14 +129,9 @@ T$.Dialog = function(content, config){
   this.init();
 }
 
-T$.modal = new T$.Dialog("iframe", {modal: true, dialogClass: "foo", headerText: "New Dialog", hideCallBack: function(){
+T$.modal = new T$.Dialog({modal: true, dialogClass: "foo", headerText: "New Dialog", hideCallBack: function(){
   console.log(this, arguments);
 }});
-// <iframe name="iframe1" src="about:blank""></iframe>
-let T$.iFrame = document.createElement("iFrame");
-T$.iFrame.src = "about:blank";
-T$.iFrame.id = "TopicalPopup";
-document.appendChild(T$.iFrame);
 
 // Style the iFrame
 T$.popupCss = `
