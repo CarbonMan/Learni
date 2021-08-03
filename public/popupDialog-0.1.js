@@ -67,7 +67,8 @@ T$.Dialog = function(content, config){
     return self.dialog;
   }
   
-  this.show = function(){
+  this.show = function(_opts){
+    document.getElementById("TopicalPopup").src = opts.url;
     setTimeout(function(){
       self.container.classList.add("visible");
       self.closeButton.focus();
