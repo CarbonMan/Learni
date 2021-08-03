@@ -202,7 +202,7 @@ T$.popupCss = `
 }
 
 .dialog-close:before{
-  content: "\00D7";
+  content: "\u00D7";
   font-size: 30px;
   text-indent: 0;
 }
