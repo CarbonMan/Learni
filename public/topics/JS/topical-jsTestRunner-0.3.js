@@ -1,6 +1,9 @@
 window.addEventListener('load', (event)=>{
 	debugger;
-  TOPICAL.LOAD_JS_TEST_RUNNER = 'jsTestRunnerReady';
+	TOPICAL.LOAD_JS_TEST_RUNNER = 'jsTestRunnerReady';
+	TOPICAL.jsTestRunner = {
+		env:{}
+	};
     TOPICAL.JSCoding = function() {
         var me = this;
         var mochaErrors;
@@ -35,24 +38,51 @@ window.addEventListener('load', (event)=>{
             }) => id == _id);
             return result.suite;
         };
+		/** 
+		* Register a function loads Javascript from a string
+		*/
         this.registerFunction = function(opts) {
             return new Promise((resolve, reject) => {
                 "use strict";
-                const newScript = document.createElement("script");
-                const oldScript = document.getElementById(opts.id);
-                if (oldScript) {
-                    oldScript.parentNode.insertBefore(newScript, oldScript.nextSibling)
-                    oldScript.parentNode.removeChild(oldScript)
-                }
+				TOPICAL.jsTestRunner.env[opts.id] = TOPICAL.jsTestRunner.env[opts.id] || {artifacts:[]};
+				const newScript = document.createElement("script");
+				const oldScript = document.getElementById(opts.id);
+            	if (oldScript) {
+					// If a previous script ran then it might have polluted the global environment with artifacts
+					// that are no longer valid. An example might be a function created but due to errors might
+					// not be valid when the script is loaded again.
+					TOPICAL.jsTestRunner.env[opts.id].artifacts.forEach( artifact =>{
+						window[artifact] = null;
+					});
+					oldScript.parentNode.insertBefore(newScript, oldScript.nextSibling)
+					oldScript.parentNode.removeChild(oldScript)
+				}
                 newScript.id = opts.id;
                 document.body.appendChild(newScript);
+				// Record any artifact names that existed before the script ran
+				let current = [];
+				for (var a in window){
+					current.push(a);
+				}
+				// Trap errors that might fire during execution
                 var errored;
                 window.onerror = (e) => {
                     errored = true;
                     reject(e.replace("Uncaught SyntaxError: ", ""));
                 }
+				// Load/Execute the script
                 newScript.innerHTML = opts.functionBody;
                 window.onerror = null;
+				// Record any artifact names that were added when the script ran
+				for (var existing in window){
+					// current holds all artifact names that existed prior to running 
+					// the script
+					if (current.indexOf(existing)==-1){
+						// Not found means a new artifact was created by the script, store its name
+						// so that if the script is run again the environment is cleaned out.
+						TOPICAL.jsTestRunner.env[opts.id].artifacts.push(existing);
+					}
+				}
                 if (!errored) {
                     resolve();
                 }
@@ -99,28 +129,6 @@ window.addEventListener('load', (event)=>{
                 link.type = 'text/css';
                 link.href = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css';
             }));
-            //*
-            pending.push(new Promise((resolve, reject) => {
-                var script = document.createElement('script');
-                head.appendChild(script);
-                script.onload = resolve;
-                script.onerror = reject;
-                script.src = "https://cdn.jsdelivr.net/gh/CarbonMan/Learni/public/CodeMirror-5.62.0-modified.js";
-                script.integrity = "sha512-i9pd5Q6ntCp6LwSgAZDzsrsOlE8SN+H5E0T5oumSXWQz5l1Oc4Kb5ZrXASfyjjqtc6Mg6xWbu+ePbbmiEPJlDg==";
-                script.crossorigin = "anonymous";
-                script.referrerpolicy = "no-referrer";
-            }));
-            pending.push(new Promise((resolve, reject) => {
-                var script = document.createElement('script');
-                head.appendChild(script);
-                script.onload = resolve;
-                script.onerror = reject;
-                script.src = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/javascript/javascript.min.js";
-                script.integrity = "sha512-9mEZ3vO6zMj0ub2Wypnt8owrHeoJCH22MkzeJ9eD3hca8/Wlqo5pEopI6HloA0F53f/RkRkHs8TyZMxbwVmnFw==";
-                script.crossorigin = "anonymous";
-                script.referrerpolicy = "no-referrer";
-            }));
-            //*/
             Promise.all(pending)
                 .then(() => {
                     var styleSheet = document.createElement("style");
