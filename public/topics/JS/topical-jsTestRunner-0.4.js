@@ -120,7 +120,7 @@ window.addEventListener('load', (event)=>{
         // Load the codeMirror editor
         var head = document.getElementsByTagName('head')[0];
         setTimeout(() => {
-            pending.push(new Promise((resolve, reject) => {
+		pending.push(new Promise((resolve, reject) => {
                 var link = document.createElement('link');
                 head.appendChild(link);
                 link.onload = resolve;
@@ -129,7 +129,27 @@ window.addEventListener('load', (event)=>{
                 link.type = 'text/css';
                 link.href = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css';
             }));
-            Promise.all(pending)
+		pending.push(new Promise((resolve, reject) => {
+                var script = document.createElement('script');
+                head.appendChild(script);
+                script.onload = resolve;
+                script.onerror = reject;
+                script.src = "https://cdn.jsdelivr.net/gh/CarbonMan/Learni/public/CodeMirror-5.62.0-modified.js";
+                script.integrity = "sha512-i9pd5Q6ntCp6LwSgAZDzsrsOlE8SN+H5E0T5oumSXWQz5l1Oc4Kb5ZrXASfyjjqtc6Mg6xWbu+ePbbmiEPJlDg==";
+                script.crossorigin = "anonymous";
+                script.referrerpolicy = "no-referrer";
+            }));
+		pending.push(new Promise((resolve, reject) => {
+                var script = document.createElement('script');
+                head.appendChild(script);
+                script.onload = resolve;
+                script.onerror = reject;
+                script.src = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/javascript/javascript.min.js";
+                script.integrity = "sha512-9mEZ3vO6zMj0ub2Wypnt8owrHeoJCH22MkzeJ9eD3hca8/Wlqo5pEopI6HloA0F53f/RkRkHs8TyZMxbwVmnFw==";
+                script.crossorigin = "anonymous";
+                script.referrerpolicy = "no-referrer";
+            }));
+		Promise.all(pending)
                 .then(() => {
                     var styleSheet = document.createElement("style");
                     styleSheet.type = "text/css";
